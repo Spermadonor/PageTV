@@ -41,6 +41,7 @@ class TVGuideApp {
     const template = await fs.readFile(path.join(process.cwd(), 'templates/template.html'), 'utf-8');
     const movieCards = movies.map(movie => `
       <div class="movie-card">
+        ${movie.poster ? `<img src="${movie.poster}" alt="${movie.name}" class="movie-poster">` : ''}
         <h2>${movie.time} - ${movie.name}</h2>
         <p class="rating">Рейтинг: ${movie.rating}</p>
         <p class="description">${movie.description}</p>
@@ -55,9 +56,6 @@ class TVGuideApp {
       hour: '2-digit',
       minute: '2-digit'
     });
-
-    console.log('Template:', template);
-    console.log('Current date:', currentDate);
 
     const html = template
       .replace(/\{\{date\}\}/g, currentDate)

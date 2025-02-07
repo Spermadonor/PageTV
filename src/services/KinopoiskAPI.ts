@@ -36,7 +36,8 @@ export class KinopoiskAPI {
       return {
         link: `https://www.kinopoisk.ru/film/${detailedMovie.id}`,
         rating: detailedMovie.rating?.kp || 0,
-        description: detailedMovie.description || ''
+        description: detailedMovie.description || '',
+        poster: detailedMovie.poster?.url || ''
       };
     } catch (error) {
       console.error('Kinopoisk API error:', error instanceof Error ? error.message : error);
@@ -48,7 +49,8 @@ export class KinopoiskAPI {
     return {
       link,
       rating: 0,
-      description: ''
+      description: '',
+      poster: ''
     };
   }
 }

@@ -49,7 +49,8 @@ export class TVProgramParser {
           name: show.name,
           rating: show.movieData.rating,
           description: show.movieData.description,
-          link: show.movieData.link
+          link: show.movieData.link,
+          poster: show.movieData.poster
         });
       });
     });

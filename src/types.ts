@@ -9,12 +9,14 @@ export interface Movie {
   rating: number;
   description: string;
   link: string;
+  poster: string;
 }
 
 export interface MovieData {
   link: string;
   rating: number;
   description: string;
+  poster: string;
 }
 
 export interface ProgramData {
