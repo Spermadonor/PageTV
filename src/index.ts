@@ -46,6 +46,13 @@ class TVGuideApp {
           <span class="channel-name">${movie.channel}</span>
         </div>
         ${movie.poster ? `<img src="${movie.poster}" alt="${movie.name}" class="movie-poster">` : ''}
+        <div class="movie-info">
+          ${movie.year ? `<span class="movie-year">Год: ${movie.year}</span>` : ''}
+          ${movie.countries && movie.countries.length > 0
+            ? `<span class="movie-countries">Страна: ${movie.countries.join(', ')}</span>`
+            : ''
+          }
+        </div>
         ${movie.frames && movie.frames.length > 0 ? `
           <div class="movie-frames">
             ${movie.frames.map(frame => `

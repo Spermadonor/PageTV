@@ -50,7 +50,9 @@ export class KinopoiskAPI {
         rating: detailedMovie.rating?.kp || 0,
         description: detailedMovie.description || '',
         poster: detailedMovie.poster?.url || '',
-        frames: frames.map((frame: any) => frame.url)
+        frames: frames.map((frame: any) => frame.url),
+        year: detailedMovie.year,
+        countries: detailedMovie.countries?.map((country: any) => country.name) || []
       };
     } catch (error) {
       console.error('Kinopoisk API error:', error instanceof Error ? error.message : error);
@@ -64,7 +66,9 @@ export class KinopoiskAPI {
       rating: 0,
       description: '',
       poster: '',
-      frames: []
+      frames: [],
+      year: undefined,
+      countries: []
     };
   }
 }

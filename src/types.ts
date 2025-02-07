@@ -12,6 +12,8 @@ export interface Movie {
   poster: string;
   channel: string;
   frames?: string[];
+  year?: number;
+  countries?: string[];
 }
 
 export interface MovieData {
@@ -20,6 +22,8 @@ export interface MovieData {
   description: string;
   poster: string;
   frames?: string[];
+  year?: number;
+  countries?: string[];
 }
 
 export interface ProgramData {

@@ -52,7 +52,9 @@ export class TVProgramParser {
           link: show.movieData.link,
           poster: show.movieData.poster,
           channel: program.title,
-          frames: show.movieData.frames
+          frames: show.movieData.frames,
+          year: show.movieData.year,
+          countries: show.movieData.countries
         });
       });
     });
