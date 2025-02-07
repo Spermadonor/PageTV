@@ -48,9 +48,20 @@ class TVGuideApp {
       </div>
     `).join('');
 
-    const html = template.replace('{{content}}', movieCards)
-                        .replace('{{date}}', new Date().toLocaleDateString('ru-RU'));
+    const currentDate = new Date().toLocaleDateString('ru-RU', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
 
+    console.log('Template:', template);
+    console.log('Current date:', currentDate);
+
+    const html = template
+      .replace(/\{\{date\}\}/g, currentDate)
+      .replace('{{content}}', movieCards);
     await fs.writeFile(path.join(process.cwd(), 'dist/index.html'), html);
   }
 }
