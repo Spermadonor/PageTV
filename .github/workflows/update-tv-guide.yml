@@ -1,0 +1,32 @@
+name: Update TV Guide
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # Запуск в 10:00 МСК (7:00 UTC)
+  workflow_dispatch:  # Позволяет запускать вручную
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '22'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build and update TV guide
+      env:
+        KINOPOISK_API_KEY: ${{ secrets.KINOPOISK_API_KEY }}
+      run: npm run build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
