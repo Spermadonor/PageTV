@@ -31,13 +31,15 @@ export interface ProgramData {
   rating: string;
   year: string | null;
   description: string;
+  poster: string;
+  countries: string[];
 }
 
 export interface ShowItem {
   time: string;
   name: string;
   programData: ProgramData;
-  movieData: MovieData;
+  movieData: ProgramData;
 }
 
 export interface ProgramResult {

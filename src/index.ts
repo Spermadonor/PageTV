@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import { KinopoiskAPI } from './services/KinopoiskAPI';
 import { TVProgramParser } from './services/TVProgramParser';
 import { TVProgram, Movie } from './types';
 import * as fs from 'fs/promises';
@@ -9,22 +8,17 @@ dotenv.config();
 
 class TVGuideApp {
   private programs: TVProgram[];
-  private kinopoiskApi: KinopoiskAPI;
 
   constructor() {
     this.programs = [
       { title: "НСТ", link: "https://tv.mail.ru/sankt_peterburg/channel/929/" },
       { title: "Киноужас", link: "https://tv.mail.ru/sankt_peterburg/channel/3108/" }
     ];
-
-    this.kinopoiskApi = new KinopoiskAPI(
-      process.env.KINOPOISK_API_KEY || ''
-    );
   }
 
   async run() {
     try {
-      const parser = new TVProgramParser(this.programs, this.kinopoiskApi);
+      const parser = new TVProgramParser(this.programs);
 
       for (const program of this.programs) {
         await parser.parseProgram(program);

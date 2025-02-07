@@ -1,15 +1,11 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { TVProgram, ProgramResult, ProgramData, ShowItem, Movie } from '../types';
-import { KinopoiskAPI } from './KinopoiskAPI';
 
 export class TVProgramParser {
   private result: ProgramResult[] = [];
 
-  constructor(
-    private programs: TVProgram[],
-    private kinopoiskApi: KinopoiskAPI
-  ) {}
+  constructor(private programs: TVProgram[]) {}
 
   async parseProgram(program: TVProgram): Promise<void> {
     try {
@@ -47,14 +43,13 @@ export class TVProgramParser {
         movies.push({
           time: show.time,
           name: show.name,
-          rating: show.movieData.rating,
-          description: show.movieData.description,
-          link: show.movieData.link,
-          poster: show.movieData.poster,
+          rating: parseFloat(show.programData.rating) || 0,
+          description: show.programData.description,
+          link: show.programData.link,
+          poster: show.programData.poster || '',
           channel: program.title,
-          frames: show.movieData.frames,
-          year: show.movieData.year,
-          countries: show.movieData.countries
+          year: show.programData.year ? parseInt(show.programData.year) : undefined,
+          countries: show.programData.countries || []
         });
       });
     });
@@ -62,19 +57,18 @@ export class TVProgramParser {
   }
 
   private async _parseShowItem($: cheerio.Root, item: cheerio.Cheerio, programLink: string): Promise<ShowItem | null> {
-    const name = item.find(".p-programms__item__name-link").text();
+    const name = item.find(".p-programms__item__name-link").text().trim();
     if (!name) return null;
 
     const id = item.attr("data-id");
     const time = item.attr("data-start") || '0';
     const programData = await this._getProgramData(id!, programLink);
-    const movieData = await this.kinopoiskApi.searchMovie(name, programData.year || undefined);
 
     return {
       time,
       name,
       programData,
-      movieData
+      movieData: programData // используем те же данные
     };
   }
 
@@ -84,27 +78,48 @@ export class TVProgramParser {
     const $ = cheerio.load(response.data);
 
     const rating = $(".p-rate-flag__imdb-text").text().trim() || '0';
-    const description = $(".p-show-more__content").text();
+    const description = $(".p-show-more__content").text().trim();
     const year = this._extractYear($);
+    const poster = this._extractPoster($);
+    const countries = this._extractCountries($);
 
     return {
       link,
       rating,
       year,
-      description
+      description,
+      poster,
+      countries
     };
   }
 
-  private _extractYear($: cheerio.Root): string | null {
-    const listLink = $('.link_black');
-    for (let i = 0; i < listLink.length; i++) {
-      const text = listLink.eq(i).text();
-      const years = text.match(/\d{4}/g);
-      if (years) {
-        const year = parseInt(years[0]);
-        return `${year - 1}-${year + 1}`;
+  private _extractPoster($: cheerio.Root): string {
+    const posterImg = $(".p-picture__container img").first();
+    return posterImg.attr("src") || '';
+  }
+
+  private _extractCountries($: cheerio.Root): string[] {
+    const countries: string[] = [];
+    $(".p-metadata__item").each((_, elem) => {
+      const label = $(elem).find(".p-metadata__label").text().trim();
+      if (label.includes("Страна")) {
+        const countryText = $(elem).find(".p-metadata__value").text().trim();
+        countries.push(...countryText.split(", "));
       }
-    }
-    return null;
+    });
+    return countries;
+  }
+
+  private _extractYear($: cheerio.Root): string | null {
+    let yearText = '';
+    $(".p-metadata__item").each((_, elem) => {
+      const label = $(elem).find(".p-metadata__label").text().trim();
+      if (label.includes("Год")) {
+        yearText = $(elem).find(".p-metadata__value").text().trim();
+      }
+    });
+
+    const yearMatch = yearText.match(/\d{4}/);
+    return yearMatch ? yearMatch[0] : null;
   }
 }
