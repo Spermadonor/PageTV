@@ -10,6 +10,8 @@ export interface Movie {
   description: string;
   link: string;
   poster: string;
+  channel: string;
+  frames?: string[];
 }
 
 export interface MovieData {
@@ -17,6 +19,7 @@ export interface MovieData {
   rating: number;
   description: string;
   poster: string;
+  frames?: string[];
 }
 
 export interface ProgramData {

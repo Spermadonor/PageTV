@@ -50,7 +50,9 @@ export class TVProgramParser {
           rating: show.movieData.rating,
           description: show.movieData.description,
           link: show.movieData.link,
-          poster: show.movieData.poster
+          poster: show.movieData.poster,
+          channel: program.title,
+          frames: show.movieData.frames
         });
       });
     });

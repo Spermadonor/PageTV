@@ -28,16 +28,29 @@ export class KinopoiskAPI {
         return this._createEmptyMovieResult('Not found');
       }
 
-      const detailResponse = await axios.get(`${this.baseUrl}/movie/${movie.id}`, {
-        headers: this.headers
-      });
+      const [detailResponse, imagesResponse] = await Promise.all([
+        axios.get(`${this.baseUrl}/movie/${movie.id}`, {
+          headers: this.headers
+        }),
+        axios.get(`${this.baseUrl}/image`, {
+          headers: this.headers,
+          params: {
+            movieId: movie.id,
+            type: 'still',
+            limit: 3
+          }
+        })
+      ]);
 
       const detailedMovie = detailResponse.data;
+      const frames = imagesResponse.data.docs || [];
+
       return {
         link: `https://www.kinopoisk.ru/film/${detailedMovie.id}`,
         rating: detailedMovie.rating?.kp || 0,
         description: detailedMovie.description || '',
-        poster: detailedMovie.poster?.url || ''
+        poster: detailedMovie.poster?.url || '',
+        frames: frames.map((frame: any) => frame.url)
       };
     } catch (error) {
       console.error('Kinopoisk API error:', error instanceof Error ? error.message : error);
@@ -50,7 +63,8 @@ export class KinopoiskAPI {
       link,
       rating: 0,
       description: '',
-      poster: ''
+      poster: '',
+      frames: []
     };
   }
 }
