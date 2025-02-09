@@ -99,9 +99,10 @@ export class TVProgramParser {
 
     // Получаем кадры из фильма
     const frames: string[] = [];
-    $('.p-frame.p-frame_preview img').each((_, elem) => {
-      const src = $(elem).attr('src');
+    $('.p-picture_object-fit img').each((_, elem) => {
+      const src = $(elem).data('lazy-block-src');
       if (src) frames.push(src);
+      if (frames.length >= 3) return false;
     });
 
     return {
