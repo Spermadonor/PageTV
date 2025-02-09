@@ -7,12 +7,7 @@
   <img src="{{poster}}" alt="{{name}}" class="movie-poster">
   {{/if}}
   <div class="movie-info">
-    {{#if year}}
-    <span class="movie-year">Год: {{year}}</span>
-    {{/if}}
-    {{#if countries}}
-    <span class="movie-countries">Страна: {{countries}}</span>
-    {{/if}}
+    {{content}}
   </div>
   {{#if frames}}
   <div class="movie-frames">
