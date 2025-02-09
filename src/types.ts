@@ -38,7 +38,6 @@ export interface ShowItem {
   time: string;
   name: string;
   programData: ProgramData;
-  movieData: ProgramData;
 }
 
 export interface ProgramResult {

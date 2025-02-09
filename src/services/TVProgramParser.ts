@@ -71,7 +71,6 @@ export class TVProgramParser {
         time,
         name,
         programData,
-        movieData: programData
       };
     } catch (error) {
       console.error('Error parsing show item:', error);
