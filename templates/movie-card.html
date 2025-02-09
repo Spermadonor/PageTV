@@ -1,0 +1,27 @@
+<div class="movie-card">
+  <div class="movie-header">
+    <h2>{{time}} - {{name}}</h2>
+    <span class="channel-name">{{channel}}</span>
+  </div>
+  {{#if poster}}
+  <img src="{{poster}}" alt="{{name}}" class="movie-poster">
+  {{/if}}
+  <div class="movie-info">
+    {{#if year}}
+    <span class="movie-year">Год: {{year}}</span>
+    {{/if}}
+    {{#if countries}}
+    <span class="movie-countries">Страна: {{countries}}</span>
+    {{/if}}
+  </div>
+  {{#if frames}}
+  <div class="movie-frames">
+    {{#each frames}}
+    <img src="{{this}}" alt="Кадр из {{../name}}" class="movie-frame">
+    {{/each}}
+  </div>
+  {{/if}}
+  <p class="rating">Рейтинг: {{rating}}</p>
+  <p class="description">{{description}}</p>
+  <a href="{{link}}" target="_blank">Подробнее на Mail.ru</a>
+</div>

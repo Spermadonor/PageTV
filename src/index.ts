@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { TVProgramParser } from './services/TVProgramParser';
+import { TemplateRenderer } from './services/TemplateRenderer';
 import { TVProgram, Movie } from './types';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -8,16 +9,21 @@ dotenv.config();
 
 class TVGuideApp {
   private programs: TVProgram[];
+  private templateRenderer: TemplateRenderer;
 
   constructor() {
     this.programs = [
       { title: "НСТ", link: "https://tv.mail.ru/sankt_peterburg/channel/929/" },
       { title: "Киноужас", link: "https://tv.mail.ru/sankt_peterburg/channel/3108/" }
     ];
+    this.templateRenderer = new TemplateRenderer();
   }
 
   async run() {
     try {
+      await this.templateRenderer.loadTemplate('template');
+      await this.templateRenderer.loadTemplate('movie-card');
+
       const parser = new TVProgramParser(this.programs);
 
       for (const program of this.programs) {
@@ -32,33 +38,9 @@ class TVGuideApp {
   }
 
   private async generateHTML(movies: Movie[]) {
-    const template = await fs.readFile(path.join(process.cwd(), 'templates/template.html'), 'utf-8');
-    const movieCards = movies.map(movie => `
-      <div class="movie-card">
-        <div class="movie-header">
-          <h2>${movie.time} - ${movie.name}</h2>
-          <span class="channel-name">${movie.channel}</span>
-        </div>
-        ${movie.poster ? `<img src="${movie.poster}" alt="${movie.name}" class="movie-poster">` : ''}
-        <div class="movie-info">
-          ${movie.year ? `<span class="movie-year">Год: ${movie.year}</span>` : ''}
-          ${movie.countries && movie.countries.length > 0
-            ? `<span class="movie-countries">Страна: ${movie.countries.join(', ')}</span>`
-            : ''
-          }
-        </div>
-        ${movie.frames && movie.frames.length > 0 ? `
-          <div class="movie-frames">
-            ${movie.frames.map(frame => `
-              <img src="${frame}" alt="Кадр из ${movie.name}" class="movie-frame">
-            `).join('')}
-          </div>
-        ` : ''}
-        <p class="rating">Рейтинг: ${movie.rating}</p>
-        <p class="description">${movie.description}</p>
-        <a href="${movie.link}" target="_blank">Подробнее на Кинопоиске</a>
-      </div>
-    `).join('');
+    const movieCards = movies.map(movie =>
+      this.templateRenderer.render('movie-card', movie)
+    ).join('');
 
     const currentDate = new Date().toLocaleDateString('ru-RU', {
       year: 'numeric',
@@ -68,9 +50,11 @@ class TVGuideApp {
       minute: '2-digit'
     });
 
-    const html = template
-      .replace(/\{\{date\}\}/g, currentDate)
-      .replace('{{content}}', movieCards);
+    const html = this.templateRenderer.render('template', {
+      date: currentDate,
+      content: movieCards
+    });
+
     await fs.writeFile(path.join(process.cwd(), 'dist/index.html'), html);
   }
 }
