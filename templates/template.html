@@ -1,22 +1,45 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ТВ Программа на {{date}}</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ТВ Программа на {{date}}</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <header>
-        <h1>ТВ Программа на {{date}}</h1>
-    </header>
-    <main>
-        <div class="movies-container">
-            {{content}}
-        </div>
-    </main>
-    <footer>
-        <p>Обновлено: {{date}}</p>
-    </footer>
+  <header>
+    <h1>ТВ Программа на {{date}}</h1>
+  </header>
+  <main>
+    <div class="movies-container">
+      {{content}}
+    </div>
+  </main>
+  <footer>
+    <p>Обновлено: {{date}}</p>
+  </footer>
+
+  <script type="module">
+    const container = document.querySelector('.movies-container');
+    let isResize = false;
+    container.addEventListener('click', (event) => {
+      const frame = event.target.closest('.movie-frame');
+      if (frame) {
+        if (isResize) {
+          document.querySelector('.movie-frame-resize').remove();
+          isResize = false;
+        } else {
+          const clonedFrame = frame.cloneNode(true);
+          clonedFrame.classList.add('movie-frame-resize');
+          container.appendChild(clonedFrame);
+          isResize = true;
+        }
+      }
+    })
+  </script>
+
 </body>
+
 </html>
