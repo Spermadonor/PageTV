@@ -23,19 +23,19 @@
 
   <script type="module">
     const container = document.querySelector('.movies-container');
-    let isResize = false;
     container.addEventListener('click', (event) => {
-      const frame = event.target.closest('.movie-frame');
+      const target = event.target;
+      const elemFrameResize = document.querySelector('.movie-frame-resize');
+      if (elemFrameResize) {
+        const frameResize = target.closest('.movie-frame-resize');
+        elemFrameResize.remove();
+        if (frameResize) return;
+      }
+      const frame = target.closest('.movie-frame');
       if (frame) {
-        if (isResize) {
-          document.querySelector('.movie-frame-resize').remove();
-          isResize = false;
-        } else {
-          const clonedFrame = frame.cloneNode(true);
-          clonedFrame.classList.add('movie-frame-resize');
-          container.appendChild(clonedFrame);
-          isResize = true;
-        }
+        const clonedFrame = frame.cloneNode(true);
+        clonedFrame.classList.add('movie-frame-resize');
+        container.appendChild(clonedFrame);
       }
     })
   </script>
