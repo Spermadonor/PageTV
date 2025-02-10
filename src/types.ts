@@ -15,16 +15,6 @@ export interface Movie {
   content: string;
 }
 
-export interface MovieData {
-  link: string;
-  rating: number;
-  description: string;
-  poster: string;
-  frames?: string[];
-  year?: number;
-  countries?: string[];
-}
-
 export interface ProgramData {
   link: string;
   rating: string;
