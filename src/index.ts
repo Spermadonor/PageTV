@@ -1,11 +1,8 @@
-import dotenv from 'dotenv';
 import { TVProgramParser } from './services/TVProgramParser';
 import { TemplateRenderer } from './services/TemplateRenderer';
 import { TVProgram, Movie } from './types';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-
-dotenv.config();
 
 class TVGuideApp {
   private programs: TVProgram[];
