@@ -95,8 +95,11 @@ export class TVProgramParser {
 
     // Получаем информацию о фильме из блока tv__EventInfo
     const eventInfo = $('[data-logger="tv__EventInfo"]').first();
-    const content = eventInfo.text().trim();
-
+    let content = '';
+    eventInfo.children().each((_, elem) => {
+      const text = $(elem).text().trim();
+      if (text) content += text + ' ';
+    })
     // Получаем кадры из фильма
     const frames: string[] = [];
     $('.p-picture_object-fit img').each((_, elem) => {
