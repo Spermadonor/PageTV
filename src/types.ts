@@ -4,6 +4,7 @@ export interface TVProgram {
 }
 
 export interface Movie {
+  id: string;
   time: string;
   name: string;
   rating: number;
@@ -16,6 +17,7 @@ export interface Movie {
 }
 
 export interface ProgramData {
+  id: string,
   link: string;
   rating: string;
   description: string;

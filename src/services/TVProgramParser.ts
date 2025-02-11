@@ -41,6 +41,7 @@ export class TVProgramParser {
     this.result.forEach(program => {
       program.shows.forEach(show => {
         movies.push({
+          id: show.programData.id,
           time: show.time,
           name: show.name,
           rating: parseFloat(show.programData.rating) || 0,
@@ -105,6 +106,7 @@ export class TVProgramParser {
     });
 
     return {
+      id,
       link,
       rating,
       description,
