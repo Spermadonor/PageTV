@@ -3,7 +3,7 @@ name: Update TV Guide
 on:
   schedule:
     - cron: '0 7 * * *'  # Запуск в 10:00 МСК (7:00 UTC)
-  workflow_dispatch:  # Позволяет запускать вручную
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -19,10 +19,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4  # Обновлено до v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3  # Обновлено до v3
       with:
         node-version: '22'
 
@@ -36,7 +36,7 @@ jobs:
       uses: actions/configure-pages@v3
 
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v2
+      uses: actions/upload-pages-artifact@v3  # Обновлено до v3
       with:
         path: './dist'
 
