@@ -23,6 +23,10 @@ header {
   padding: 2rem;
 }
 
+h1 {
+  font-size: 20px;
+}
+
 .movies-container {
   max-width: 1200px;
   margin: 2rem auto;
@@ -83,6 +87,7 @@ footer {
 
 .movie-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -129,6 +134,7 @@ footer {
   margin-bottom: 1rem;
   font-size: 0.9rem;
   color: #666;
+  word-break: break-word;
 }
 
 .movie-year,
